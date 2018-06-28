@@ -2,8 +2,6 @@ package be.viaa.tools.xmldiff;
 
 
 import be.viaa.tools.xmldiff.model.ComparisonDetail;
-import be.viaa.tools.xmldiff.model.differences.TextValueDifference;
-import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,8 +31,8 @@ public class CarrierTest {
         fileReader = new FileReader();
 
         // Read the files
-        File controlFile = fileReader.readFile("test-data/metadata/CarrierMetadataControl.xml");
-        File testFile = fileReader.readFile("test-data/metadata/CarrierMetadataTest.xml");
+        File controlFile = fileReader.readFile("test-data/carrier/CarrierMetadataControl.xml");
+        File testFile = fileReader.readFile("test-data/carrier/CarrierMetadataTest.xml");
 
         // Initialize the control and source
         control = SourceGenerator.fromFile(controlFile);
@@ -45,15 +43,54 @@ public class CarrierTest {
     public void testIgnoreWhitespaces() {
         comparator = new DifferenceComparator(engine, true);
         ComparisonDetail comparisonDetail = comparator.calculateDocumentDifferences(control, test);
-        Assert.assertEquals("There should be 5 node differences", 5, comparisonDetail.getNodeDifferences().size());
-        Assert.assertEquals("There should be 32 text value differences", 32, comparisonDetail.getTextValueDifferences().size());
-
-        for (TextValueDifference tvd : comparisonDetail.getTextValueDifferences()) {
-            // All text value differences are '<VALUE> 0' vs '<VALUE> 1'
-            Assert.assertEquals("Text values should only be 0's replaced with 1's", tvd.getControlValue().replace("0", "1"), tvd.getTestValue());
-        }
+        Assert.assertEquals("There should be 4 node differences", 4, comparisonDetail.getNodeDifferences().size());
+        Assert.assertEquals("There should be 33 text value differences", 33, comparisonDetail.getTextValueDifferences().size());
         Assert.assertTrue("Node differences should contain 4 'multiselect' differences", comparisonDetail.getNodeDifferences().stream().filter(nd -> nd.toString().contains("<multiselect>")).count() == 4);
 
 
+    }
+
+    @Test
+    public void testEmptyTags() {
+        final String CONTROL_XML =
+                "<root>" +
+                    "<data>value</data>" +
+                    "<otherdata>value1</otherdata>" +
+                "</root>";
+        final String TEST_XML =
+                "<root>" +
+                    "<data></data>" +
+                    "<otherdata>value2</otherdata>" +
+                "</root>";
+
+        comparator = new DifferenceComparator(engine, true);
+        ComparisonDetail comparisonDetail = comparator.calculateDocumentDifferences(
+                SourceGenerator.fromString(CONTROL_XML),
+                SourceGenerator.fromString(TEST_XML)
+        );
+        Assert.assertEquals("Should contain 2 text value differences", 2, comparisonDetail.getTextValueDifferences().size());
+        Assert.assertEquals("Should contain 0 node differences", 0, comparisonDetail.getNodeDifferences().size());
+    }
+
+    @Test
+    public void testSelfClosingTags() {
+        final String CONTROL_XML =
+                "<root>" +
+                        "<data>value</data>" +
+                        "<otherdata>value1</otherdata>" +
+                        "</root>";
+        final String TEST_XML =
+                "<root>" +
+                        "<data/>" +
+                        "<otherdata>value2</otherdata>" +
+                        "</root>";
+
+        comparator = new DifferenceComparator(engine, true);
+        ComparisonDetail comparisonDetail = comparator.calculateDocumentDifferences(
+                SourceGenerator.fromString(CONTROL_XML),
+                SourceGenerator.fromString(TEST_XML)
+        );
+        Assert.assertEquals("Should contain 2 text value differences", 2, comparisonDetail.getTextValueDifferences().size());
+        Assert.assertEquals("Should contain 0 node differences", 0, comparisonDetail.getNodeDifferences().size());
     }
 }

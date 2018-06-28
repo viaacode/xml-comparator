@@ -3,7 +3,7 @@ package be.viaa.tools.xmldiff.model.differences;
 /**
  * Created by dieter on 26/06/2018.
  */
-public class TextValueDifference {
+public class TextValueDifference extends Difference {
     private String controlValue;
     private String testValue;
     private String xPath;

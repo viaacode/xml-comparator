@@ -14,21 +14,22 @@ import java.io.StringWriter;
 /**
  * Created by dieter on 26/06/2018.
  */
-public class NodeDifference {
-    private Node node;
-    private OriginType origin;
+public class NodeDifference extends Difference {
+    private Node controlValue;
+    private Node testValue;
 
-    public NodeDifference(Node node, OriginType origin) {
-        this.node = node;
+    public NodeDifference(Node controlValue, Node testValue, OriginType origin) {
+        this.controlValue = controlValue;
+        this.testValue = testValue;
         this.origin = origin;
     }
 
-    public Node getNode() {
-        return node;
+    public Node getControlValue() {
+        return controlValue;
     }
 
-    public void setNode(Node node) {
-        this.node = node;
+    public Node getTestValue() {
+        return testValue;
     }
 
     public OriginType getOrigin() {
@@ -43,7 +44,7 @@ public class NodeDifference {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
             transformer.setOutputProperty(OutputKeys.INDENT, "no");
-            transformer.transform(new DOMSource(node), new StreamResult(writer));
+            transformer.transform(new DOMSource(this.origin == OriginType.CONTROL ? this.controlValue : this.testValue), new StreamResult(writer));
             sb.append("'").append(writer.toString()).append("'");
             sb.append("\n");
         } catch (TransformerException e) {

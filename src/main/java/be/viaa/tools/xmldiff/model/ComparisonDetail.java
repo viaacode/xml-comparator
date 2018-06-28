@@ -1,18 +1,34 @@
 package be.viaa.tools.xmldiff.model;
 
+import be.viaa.tools.xmldiff.model.differences.Difference;
 import be.viaa.tools.xmldiff.model.differences.NodeDifference;
 import be.viaa.tools.xmldiff.model.differences.TextValueDifference;
 import org.xmlunit.diff.ComparisonType;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by dieter on 26/06/2018.
  */
 public class ComparisonDetail {
     private Map<ComparisonType, Integer> summary;
+    private List<Difference> allDifferences;
     private List<NodeDifference> nodeDifferences;
     private List<TextValueDifference> textValueDifferences;
+
+    public ComparisonDetail(Map<ComparisonType, Integer> summary, List<Difference> allDifferences) {
+        this.summary = summary;
+        this.allDifferences = allDifferences;
+        this.textValueDifferences = allDifferences.stream()
+                .filter(d -> d instanceof TextValueDifference)
+                .map(d -> (TextValueDifference) d)
+                .collect(Collectors.toList());
+        this.nodeDifferences = allDifferences.stream()
+                .filter(d -> d instanceof NodeDifference)
+                .map(d -> (NodeDifference) d)
+                .collect(Collectors.toList());
+    }
 
     public ComparisonDetail(List<NodeDifference> nodeDifferences, List<TextValueDifference> textValueDifferences, Map<ComparisonType, Integer> summary) {
         this.summary = summary;
