@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Created by dieter on 26/06/2018.
+ * Created by VIAA on 26/06/2018.
  */
 public class DifferenceComparator {
     private DifferenceEngine engine;
@@ -53,49 +53,11 @@ public class DifferenceComparator {
     private Difference extractDifference(Comparison comparison) {
         switch (comparison.getType()) {
             case CHILD_LOOKUP:
-                return transformNodeDifference(comparison);
+                return NodeDifference.NodeDifferenceBuilder.fromComparison(comparison, this.ignoreWhiteSpaces);
             case TEXT_VALUE:
-                return transformTextValueDifference(comparison);
-//            case CHILD_NODELIST_LENGTH:
-//                return transformNodeLengthDifference(comparison);
+                return TextValueDifference.TextValueDifferenceBuilder.fromComparison(comparison, this.ignoreWhiteSpaces);
             default:
                 return null;
         }
-    }
-
-    private Difference transformNodeDifference(Comparison comparison) {
-        boolean existsInControl = comparison.getControlDetails().getXPath() != null;
-        boolean existsInTest = comparison.getTestDetails().getXPath() != null;
-        Node currentNode = null;
-        OriginType origin = null;
-        // Check in which document the node exists, Control or Test
-        if (existsInControl) {
-            currentNode = comparison.getControlDetails().getTarget();
-            origin = OriginType.CONTROL;
-        }
-        if (existsInTest) {
-            currentNode = comparison.getTestDetails().getTarget();
-            origin = OriginType.TEST;
-        }
-        // Ignore the node change if no node was found or if only the text changed from a bunch of whitespaces to another bunch of whitespaces
-        if (currentNode == null || currentNode.getTextContent() == null || (this.ignoreWhiteSpaces && currentNode.getTextContent().trim().isEmpty()))
-            return null;
-        if (comparison.getControlDetails().getTarget() instanceof DeferredTextImpl)
-            return new TextValueDifference(
-                    origin == OriginType.CONTROL ? ((DeferredTextImpl) comparison.getControlDetails().getTarget()).getData() : null,
-                    origin == OriginType.TEST ? ((DeferredTextImpl) comparison.getTestDetails().getTarget()).getData() : null,
-                    origin == OriginType.CONTROL ? comparison.getControlDetails().getXPath() : comparison.getTestDetails().getXPath());
-        return new NodeDifference(comparison.getControlDetails().getTarget(), comparison.getTestDetails().getTarget(), origin);
-    }
-
-    private TextValueDifference transformTextValueDifference(Comparison comparison) {
-        String controlValue = comparison.getControlDetails().getValue().toString().trim();
-        String testValue = comparison.getTestDetails().getValue().toString().trim();
-        if (this.ignoreWhiteSpaces && controlValue.isEmpty() && testValue.isEmpty()) return null;
-        return new TextValueDifference(comparison.getControlDetails().getValue().toString(), comparison.getTestDetails().getValue().toString(), comparison.getControlDetails().getXPath());
-    }
-
-    private Difference transformNodeLengthDifference(Comparison comparison) {
-        return null; //new NodeDifference(null, null, null);
     }
 }
