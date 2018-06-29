@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Created by dieter on 26/06/2018.
+ * Created by VIAA on 26/06/2018.
  */
 public class ComparisonDetail {
     private Map<ComparisonType, Integer> summary;
@@ -57,11 +57,11 @@ public class ComparisonDetail {
         sb.append("=================\n\n");
         sb.append("* Node differences *\n");
         for (NodeDifference nd : this.nodeDifferences) {
-            sb.append(nd.toString());
+            sb.append("\t" + nd.toString());
         }
         sb.append("* Text value differences *\n");
         for (TextValueDifference tvd : this.textValueDifferences) {
-            sb.append(tvd.toString());
+            sb.append("\t" + tvd.toString());
             sb.append("\n");
         }
         return sb.toString();

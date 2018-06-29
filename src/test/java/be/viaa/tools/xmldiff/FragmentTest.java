@@ -6,19 +6,22 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xmlunit.diff.*;
+import org.xmlunit.diff.DOMDifferenceEngine;
+import org.xmlunit.diff.DifferenceEngine;
 
-import javax.xml.transform.*;
+import javax.xml.transform.Source;
 import java.io.File;
 
 /**
- * Created by dieter on 26/06/2018.
+ * Created by VIAA on 26/06/2018.
  */
 public class FragmentTest {
     final static Logger logger = Logger.getLogger(FragmentTest.class);
     private DifferenceEngine engine;
     private FileReader fileReader;
     private DifferenceComparator comparator;
+    private File controlFile;
+    private File testFile;
     private Source control;
     private Source test;
 
@@ -29,8 +32,8 @@ public class FragmentTest {
         fileReader = new FileReader();
 
         // Read the files
-        File controlFile = fileReader.readFile("test-data/fragments/FragmentMetadataControl.xml");
-        File testFile = fileReader.readFile("test-data/fragments/FragmentMetadataTest.xml");
+        controlFile = fileReader.readFile("test-data/fragments/FragmentMetadataControl.xml");
+        testFile = fileReader.readFile("test-data/fragments/FragmentMetadataTest.xml");
 
         // Initialize the control and source
         control = SourceGenerator.fromFile(controlFile);
