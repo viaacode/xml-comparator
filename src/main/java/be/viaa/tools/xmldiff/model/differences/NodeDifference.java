@@ -42,7 +42,7 @@ public class NodeDifference extends Difference {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
             transformer.setOutputProperty(OutputKeys.INDENT, "no");
-            transformer.transform(new DOMSource(this.origin == OriginType.CONTROL ? this.controlValue : this.testValue), new StreamResult(writer));
+            transformer.transform(new DOMSource(this.getOrigin() == OriginType.CONTROL ? this.getControlValue() : this.getTestValue()), new StreamResult(writer));
             return writer.toString();
         } catch (TransformerException e) {
             return null;

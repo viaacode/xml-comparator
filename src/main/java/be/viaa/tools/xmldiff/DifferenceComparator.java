@@ -27,6 +27,13 @@ public class DifferenceComparator {
 
     public ComparisonDetail calculateDocumentDifferences(Source control, Source test) {
         final List<Comparison> differences = new ArrayList<Comparison>();
+        engine.setDifferenceEvaluator(DifferenceEvaluators.chain(
+                // Use the default evaluator
+                DifferenceEvaluators.Default,
+                // Ignore CHILD_NODELIST_SEQUENCE (order of elements)
+                DifferenceEvaluators.downgradeDifferencesToSimilar(ComparisonType.CHILD_NODELIST_SEQUENCE)
+        ));
+        engine.setNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byName));
         // Add listener for all differences
         engine.addDifferenceListener((comparison, outcome) -> differences.add(comparison));
         // Compare the two documents
@@ -56,6 +63,8 @@ public class DifferenceComparator {
                 return NodeDifference.NodeDifferenceBuilder.fromComparison(comparison, this.ignoreWhiteSpaces);
             case TEXT_VALUE:
                 return TextValueDifference.TextValueDifferenceBuilder.fromComparison(comparison, this.ignoreWhiteSpaces);
+            case ATTR_NAME_LOOKUP:
+                return AttributeDifference.AttributeDifferenceBuilder.fromComparison(comparison, this.ignoreWhiteSpaces);
             default:
                 return null;
         }

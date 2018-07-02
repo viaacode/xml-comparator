@@ -1,5 +1,6 @@
 package be.viaa.tools.xmldiff.model;
 
+import be.viaa.tools.xmldiff.model.differences.AttributeDifference;
 import be.viaa.tools.xmldiff.model.differences.Difference;
 import be.viaa.tools.xmldiff.model.differences.NodeDifference;
 import be.viaa.tools.xmldiff.model.differences.TextValueDifference;
@@ -14,26 +15,14 @@ import java.util.stream.Collectors;
 public class ComparisonDetail {
     private Map<ComparisonType, Integer> summary;
     private List<Difference> allDifferences;
-    private List<NodeDifference> nodeDifferences;
-    private List<TextValueDifference> textValueDifferences;
 
     public ComparisonDetail(Map<ComparisonType, Integer> summary, List<Difference> allDifferences) {
         this.summary = summary;
         this.allDifferences = allDifferences;
-        this.textValueDifferences = allDifferences.stream()
-                .filter(d -> d instanceof TextValueDifference)
-                .map(d -> (TextValueDifference) d)
-                .collect(Collectors.toList());
-        this.nodeDifferences = allDifferences.stream()
-                .filter(d -> d instanceof NodeDifference)
-                .map(d -> (NodeDifference) d)
-                .collect(Collectors.toList());
     }
 
-    public ComparisonDetail(List<NodeDifference> nodeDifferences, List<TextValueDifference> textValueDifferences, Map<ComparisonType, Integer> summary) {
-        this.summary = summary;
-        this.nodeDifferences = nodeDifferences;
-        this.textValueDifferences = textValueDifferences;
+    public boolean areEqual() {
+        return allDifferences.size() == 0;
     }
 
     public Map<ComparisonType, Integer> getSummary() {
@@ -41,11 +30,24 @@ public class ComparisonDetail {
     }
 
     public List<NodeDifference> getNodeDifferences() {
-        return nodeDifferences;
+        return allDifferences.stream()
+                .filter(d -> d instanceof NodeDifference)
+                .map(d -> (NodeDifference) d)
+                .collect(Collectors.toList());
     }
 
     public List<TextValueDifference> getTextValueDifferences() {
-        return textValueDifferences;
+        return allDifferences.stream()
+                .filter(d -> d instanceof TextValueDifference)
+                .map(d -> (TextValueDifference) d)
+                .collect(Collectors.toList());
+    }
+
+    public List<AttributeDifference> getAttributeDifferences() {
+        return allDifferences.stream()
+                .filter(d -> d instanceof AttributeDifference)
+                .map(d -> (AttributeDifference) d)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -56,11 +58,11 @@ public class ComparisonDetail {
         }
         sb.append("=================\n\n");
         sb.append("* Node differences *\n");
-        for (NodeDifference nd : this.nodeDifferences) {
+        for (NodeDifference nd : getNodeDifferences()) {
             sb.append("\t" + nd.toString());
         }
         sb.append("* Text value differences *\n");
-        for (TextValueDifference tvd : this.textValueDifferences) {
+        for (TextValueDifference tvd : getTextValueDifferences()) {
             sb.append("\t" + tvd.toString());
             sb.append("\n");
         }

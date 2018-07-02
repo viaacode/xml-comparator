@@ -1,4 +1,4 @@
-package be.viaa.tools.xmldiff;
+package be.viaa.tools.xmldiff.generators;
 
 import org.xmlunit.builder.Input;
 

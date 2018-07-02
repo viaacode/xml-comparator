@@ -30,10 +30,14 @@ public class TextValueDifference extends Difference {
 
     @Override
     public String toString() {
-        return String.format("Value at %s changed from '%s' to '%s'", xPath, controlValue, testValue);
+        return String.format("Value at %s changed from '%s' to '%s'", getxPath(), getControlValue(), getTestValue());
     }
 
     public static class TextValueDifferenceBuilder {
+        public static Difference fromComparison(Comparison comparison) {
+            return fromComparison(comparison, true);
+        }
+
         public static Difference fromComparison(Comparison comparison, boolean ignoreWhiteSpaces) {
             String controlValue = comparison.getControlDetails().getValue().toString().trim();
             String testValue = comparison.getTestDetails().getValue().toString().trim();
