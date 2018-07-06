@@ -43,6 +43,10 @@ public class TextValueDifference extends Difference {
         return controlNode;
     }
 
+    public Node getTestNode() {
+        return testNode;
+    }
+
     @Override
     public String toString() {
         return String.format("Value at %s changed from '%s' to '%s'", getxPath(), getControlValue(), getTestValue());
