@@ -20,9 +20,19 @@ before_script:
           <proxies>
               <proxy>
                   <active>true</active>
-                  <protocol>$PROXY_PROTOCOL</protocol>
+                  <protocol>http</protocol>
                   <host>$PROXY_HOST</host>
                   <port>$PROXY_PORT</port>
+                  <nonProxyHosts>*.viaa.be</nonProxyHosts>
+                  <active>true</active>
+              </proxy>
+              <proxy>
+                  <active>true</active>
+                  <protocol>https</protocol>
+                  <host>$PROXY_HOST</host>
+                  <port>$PROXY_PORT</port>
+                  <nonProxyHosts>*.viaa.be</nonProxyHosts>
+                  <active>true</active>
               </proxy>
           </proxies>
       </settings>' > $HOME/.m2/settings.xml
