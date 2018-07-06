@@ -1,6 +1,6 @@
 package be.viaa.tools.xmldiff;
 
-import be.viaa.tools.xmldiff.fileutils.FileReader;
+import be.viaa.tools.xmldiff.utils.fileutils.FileReader;
 import be.viaa.tools.xmldiff.generators.SourceGenerator;
 import org.xmlunit.diff.DOMDifferenceEngine;
 import org.xmlunit.diff.DifferenceEngine;

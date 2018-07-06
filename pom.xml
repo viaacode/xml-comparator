@@ -7,7 +7,12 @@
     <groupId>be.viaa</groupId>
     <artifactId>xmlcomparator</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -73,5 +78,20 @@
             <version>1.2.17</version>
         </dependency>
     </dependencies>
-
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>true</uniqueVersion>
+            <id>viaa-releases</id>
+            <name>VIAA Releases</name>
+            <url>http://do-qas-mvn-01.do.viaa.be:8081/repository/maven-releases/</url>
+            <layout>default</layout>
+        </repository>
+        <snapshotRepository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>viaa-snapshots</id>
+            <name>VIAA Snapshots</name>
+            <url>http://do-qas-mvn-01.do.viaa.be:8081/repository/maven-snapshots/</url>
+            <layout>default</layout>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

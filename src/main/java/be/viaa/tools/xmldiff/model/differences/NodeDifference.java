@@ -1,17 +1,12 @@
 package be.viaa.tools.xmldiff.model.differences;
 
 import be.viaa.tools.xmldiff.model.OriginType;
+import be.viaa.tools.xmldiff.utils.NodeUtils;
 import com.sun.org.apache.xerces.internal.dom.DeferredTextImpl;
 import org.w3c.dom.Node;
 import org.xmlunit.diff.Comparison;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.StringWriter;
 
 /**
  * Created by VIAA on 26/06/2018.
@@ -37,13 +32,8 @@ public class NodeDifference extends Difference {
     }
 
     public String toXMLString() {
-        StringWriter writer = new StringWriter();
         try {
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            transformer.setOutputProperty(OutputKeys.INDENT, "no");
-            transformer.transform(new DOMSource(this.getOrigin() == OriginType.CONTROL ? this.getControlValue() : this.getTestValue()), new StreamResult(writer));
-            return writer.toString();
+            return NodeUtils.toXMLString(this.getOrigin() == OriginType.CONTROL ? this.getControlValue() : this.getTestValue());
         } catch (TransformerException e) {
             return null;
         }
@@ -79,7 +69,10 @@ public class NodeDifference extends Difference {
                 return new TextValueDifference(
                         origin == OriginType.CONTROL ? ((DeferredTextImpl) comparison.getControlDetails().getTarget()).getData() : null,
                         origin == OriginType.TEST ? ((DeferredTextImpl) comparison.getTestDetails().getTarget()).getData() : null,
-                        origin == OriginType.CONTROL ? comparison.getControlDetails().getXPath() : comparison.getTestDetails().getXPath());
+                        origin == OriginType.CONTROL ? comparison.getControlDetails().getXPath() : comparison.getTestDetails().getXPath(),
+                        origin == OriginType.CONTROL ? comparison.getControlDetails().getTarget().getParentNode().getLocalName() : comparison.getTestDetails().getTarget().getParentNode().getLocalName(),
+                        origin == OriginType.CONTROL ? comparison.getControlDetails().getTarget() : comparison.getTestDetails().getTarget(),
+                        origin == OriginType.TEST ? comparison.getTestDetails().getTarget() : comparison.getControlDetails().getTarget());
             return new NodeDifference(comparison.getControlDetails().getTarget(), comparison.getTestDetails().getTarget(), origin);
         }
     }

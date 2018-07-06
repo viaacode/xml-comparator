@@ -1,4 +1,4 @@
-package be.viaa.tools.xmldiff.fileutils;
+package be.viaa.tools.xmldiff.utils.fileutils;
 
 import java.io.File;
 
