@@ -23,7 +23,7 @@ before_script:
                   <active>true</active>
                   <protocol>http</protocol>
                   <host>${env.PROXY_HOST}</host>
-                  <port>PROXYPORT</port>
+                  <port>80</port>
                   <nonProxyHosts>*.viaa.be</nonProxyHosts>
               </proxy>
               <proxy>
@@ -31,11 +31,11 @@ before_script:
                   <active>true</active>
                   <protocol>https</protocol>
                   <host>${env.PROXY_HOST}</host>
-                  <port>PROXYPORT</port>
+                  <port>80</port>
                   <nonProxyHosts>*.viaa.be</nonProxyHosts>
               </proxy>
           </proxies>
-      </settings>' | sed -e 's/PROXYPORT/$PROXY_PORT/g' > $HOME/.m2/settings.xml
+      </settings>' > $HOME/.m2/settings.xml
 
 cache:
   paths:
