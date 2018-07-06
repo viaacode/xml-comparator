@@ -17,6 +17,14 @@ before_script:
               <password>$NEXUS_RELEASES_PASSWORD</password>
             </server>
           </servers>
+          <proxies>
+              <proxy>
+                  <active>true</active>
+                  <protocol>$PROXY_PROTOCOL</protocol>
+                  <host>$PROXY_HOST</host>
+                  <port>$PROXY_PORT</port>
+              </proxy>
+          </proxies>
       </settings>' > $HOME/.m2/settings.xml
 
 cache:
