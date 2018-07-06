@@ -24,7 +24,6 @@ before_script:
                   <host>$PROXY_HOST</host>
                   <port>$PROXY_PORT</port>
                   <nonProxyHosts>*.viaa.be</nonProxyHosts>
-                  <active>true</active>
               </proxy>
               <proxy>
                   <active>true</active>
@@ -32,7 +31,6 @@ before_script:
                   <host>$PROXY_HOST</host>
                   <port>$PROXY_PORT</port>
                   <nonProxyHosts>*.viaa.be</nonProxyHosts>
-                  <active>true</active>
               </proxy>
           </proxies>
       </settings>' > $HOME/.m2/settings.xml
