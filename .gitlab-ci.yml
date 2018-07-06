@@ -19,21 +19,23 @@ before_script:
           </servers>
           <proxies>
               <proxy>
+                  <id>viaa-http</id>
                   <active>true</active>
                   <protocol>http</protocol>
                   <host>${env.PROXY_HOST}</host>
-                  <port>${env.PROXY_PORT}</port>
+                  <port>PROXYPORT</port>
                   <nonProxyHosts>*.viaa.be</nonProxyHosts>
               </proxy>
               <proxy>
+                  <id>viaa-https</id>
                   <active>true</active>
                   <protocol>https</protocol>
                   <host>${env.PROXY_HOST}</host>
-                  <port>${env.PROXY_PORT}</port>
+                  <port>PROXYPORT</port>
                   <nonProxyHosts>*.viaa.be</nonProxyHosts>
               </proxy>
           </proxies>
-      </settings>' > $HOME/.m2/settings.xml
+      </settings>' | sed -e 's/PROXYPORT/$PROXY_PORT/g' > $HOME/.m2/settings.xml
 
 cache:
   paths:
