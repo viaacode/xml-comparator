@@ -1,0 +1,24 @@
+before_script:
+  -echo '<settings
+          xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+          https://maven.apache.org/xsd/settings-1.0.0.xsd">
+          <localRepository>/cache/.m2</localRepository>
+          <servers>
+            <server>
+              <id>viaa-snapshots</id>
+              <username>$NEXUS_SNAPSHOTS_USERNAME</username>
+              <password>$NEXUS_SNAPSHOTS_PASSWORD</password>
+            </server>
+            <server>
+              <id>viaa-releases</id>
+              <username>$NEXUS_RELEASES_USERNAME</username>
+              <password>$NEXUS_RELEASES_PASSWORD</password>
+            </server>
+          </servers>
+      </settings>' > $HOME/.m2/settings.xml
+
+build:
+  stage: build
+  script: mvn clean package
