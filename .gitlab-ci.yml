@@ -50,4 +50,4 @@ test:
   script: mvn test
 deploy:
   stage: deploy
-  script: mvn deploy
+  script: mvn help:effective-settings && mvn deploy
