@@ -38,9 +38,9 @@ before_script:
           </proxies>
       </settings>' > $HOME/.m2/settings.xml
 
-cache:
-  paths:
-    - $HOME/.m2/repository
+#cache:
+#  paths:
+#    - $HOME/.m2/repository
 
 build:
   stage: build
