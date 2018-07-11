@@ -23,10 +23,6 @@ public class DifferenceComparator {
     public DifferenceComparator(DifferenceEngine engine, boolean ignoreWhiteSpaces) {
         this.engine = engine;
         this.ignoreWhiteSpaces = ignoreWhiteSpaces;
-    }
-
-    public ComparisonDetail calculateDocumentDifferences(Source control, Source test) {
-        final List<Comparison> differences = new ArrayList<Comparison>();
         engine.setDifferenceEvaluator(DifferenceEvaluators.chain(
                 // Use the default evaluator
                 DifferenceEvaluators.Default,
@@ -34,6 +30,22 @@ public class DifferenceComparator {
                 DifferenceEvaluators.downgradeDifferencesToSimilar(ComparisonType.CHILD_NODELIST_SEQUENCE)
         ));
         engine.setNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byName));
+    }
+
+    public DifferenceComparator(DifferenceEngine engine, boolean ignoreWhiteSpaces, ElementSelector elementSelector) {
+        this.engine = engine;
+        this.ignoreWhiteSpaces = ignoreWhiteSpaces;
+        engine.setDifferenceEvaluator(DifferenceEvaluators.chain(
+                // Use the default evaluator
+                DifferenceEvaluators.Default,
+                // Ignore CHILD_NODELIST_SEQUENCE (order of elements)
+                DifferenceEvaluators.downgradeDifferencesToSimilar(ComparisonType.CHILD_NODELIST_SEQUENCE)
+        ));
+        engine.setNodeMatcher(new DefaultNodeMatcher(elementSelector));
+    }
+
+    public ComparisonDetail calculateDocumentDifferences(Source control, Source test) {
+        final List<Comparison> differences = new ArrayList<Comparison>();
         // Add listener for all differences
         engine.addDifferenceListener((comparison, outcome) -> differences.add(comparison));
         // Compare the two documents
