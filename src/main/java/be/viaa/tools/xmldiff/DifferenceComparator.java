@@ -32,7 +32,7 @@ public class DifferenceComparator {
         engine.setNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byName));
     }
 
-    public DifferenceComparator(DifferenceEngine engine, boolean ignoreWhiteSpaces, ElementSelector elementSelector) {
+        public DifferenceComparator(DifferenceEngine engine, boolean ignoreWhiteSpaces, ElementSelector elementSelector) {
         this.engine = engine;
         this.ignoreWhiteSpaces = ignoreWhiteSpaces;
         engine.setDifferenceEvaluator(DifferenceEvaluators.chain(
